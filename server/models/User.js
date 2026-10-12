@@ -11,12 +11,11 @@ const userSchema = new mongoose.Schema({
 
   email: {
     type: String,
-    required: [true, "Please enter email..."],
+    required: [true, "Please enter email."],
     unique: true,
-    match: [
-      [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/],
-      "Please enter valid email...",
-    ],
+    trim: true,
+    lowercase: true,
+    match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Please enter a valid email."],
   },
 
   password: {
@@ -28,18 +27,18 @@ const userSchema = new mongoose.Schema({
       /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{6,}$/,
       "Password must contain at least one number and one uppercase and lowercase letter, and at least 6 or more characters",
     ],
-    },
-  
-    role: {
-        type: String,
-        enum: ["user", "admin"],
-        default:"user"
-    },
+  },
 
-    profileImage: {
-        url: String,
-        public_id: String
-    }
+  role: {
+    type: String,
+    enum: ["user", "admin"],
+    default: "user",
+  },
+
+  profileImage: {
+    url: String,
+    public_id: String,
+  },
 });
 
 userSchema.pre("save", async function () {
